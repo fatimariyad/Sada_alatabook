@@ -6,7 +6,6 @@
 <title>صدى العطاء -- بين وبائين ولادة ثالثة</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- تضمين خط عارف رقعة الرسمي والخطوط المساعدة -->
 <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Cairo:wght@200;300;400;600;700&display=swap" rel="stylesheet">
 <style>
 
@@ -36,6 +35,42 @@ body {
   font-family: 'Cairo', sans-serif;
   overflow-x: hidden;
   perspective: 1000px;
+}
+
+/* ─────────────── 1. LOADER سينمائي وقور ─────────────── */
+#cinema-loader {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100vh;
+  background-color: #000;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.loader-text {
+  font-family: 'Aref Ruqaa', serif;
+  font-size: 2.5rem;
+  opacity: 0;
+  color: #fff;
+  margin: 15px 0;
+  letter-spacing: 1px;
+}
+#phrase1 { animation: fadeInOut 3s forwards 0.5s; }
+#phrase2 { animation: fadeInOutGold 3.5s forwards 3.5s; }
+
+@keyframes fadeInOut {
+  0% { opacity: 0; filter: blur(5px); }
+  30% { opacity: 1; filter: blur(0); }
+  70% { opacity: 1; filter: blur(0); }
+  100% { opacity: 0; filter: blur(5px); }
+}
+@keyframes fadeInOutGold {
+  0% { opacity: 0; text-shadow: 0 0 0 transparent; color: #fff; }
+  30% { opacity: 1; text-shadow: 0 0 15px var(--gold); color: var(--gold-bright); }
+  70% { opacity: 1; text-shadow: 0 0 15px var(--gold); color: var(--gold-bright); }
+  100% { opacity: 0; filter: blur(10px); }
 }
 
 /* ─────────────── CUSTOM LUXURY CURSOR ─────────────── */
@@ -104,6 +139,13 @@ body {
   background: var(--paper-aged);
 }
 
+/* 5. Hover للصفحة: ترتفع قليلاً وتزداد الظلال وتصبح أدفأ */
+.page:hover {
+  transform: translateY(-5px) scale(1.005);
+  box-shadow: 0 40px 80px rgba(197, 160, 67, 0.15), -10px 0 25px rgba(0,0,0,0.2);
+  filter: sepia(4%);
+}
+
 /* The Spine Effect (Gutter Binding) */
 .page::before {
   content: '';
@@ -146,12 +188,16 @@ body {
   min-height: calc(90vh - 12rem);
 }
 
-/* Page Numbers */
+/* 7. رقم الصفحة الذهبي المطور */
 .pg-num {
   position: absolute;
   bottom: 2rem; left: 50%; transform: translateX(-50%);
-  font-family: 'Cinzel', serif; font-size: 0.75rem; font-weight: 600;
-  color: var(--ink-faint); letter-spacing: 0.3em;
+  font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 600;
+  color: var(--gold-dim); letter-spacing: 0.3em;
+  display: flex; align-items: center; gap: 10px;
+}
+.pg-num::before, .pg-num::after {
+  content: ''; display: inline-block; width: 25px; height: 1px; background: var(--gold-dim); opacity: 0.5;
 }
 
 /* ─────────────── REVEAL ANIMATIONS ─────────────── */
@@ -213,11 +259,31 @@ body {
 .cover-tag {
   font-family: 'Aref Ruqaa', serif; font-size: 1rem; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 1.5rem;
 }
+
+/* 3. ضوء متحرك يمر عبر كلمة صدى العطاء كل 8 ثواني */
 .cover-main-title {
   font-family: 'Aref Ruqaa', serif; font-size: clamp(3.5rem, 7vw, 5rem); color: #fff; line-height: 1.15; font-weight: 700;
   text-shadow: 0 4px 20px rgba(0,0,0,0.5); margin-bottom: 1.5rem;
+  position: relative; display: inline-block;
 }
-.cover-main-title span { color: var(--gold-bright); }
+.cover-main-title::after {
+  content: 'صدى\Aالعطاء';
+  white-space: pre;
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  color: var(--gold-bright);
+  overflow: hidden;
+  background: linear-gradient(90deg, transparent, #fff, var(--gold-bright), transparent);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shineText 8s infinite linear;
+}
+@keyframes shineText {
+  0% { background-position: -200% 0; }
+  12% { background-position: 200% 0; }
+  100% { background-position: 200% 0; }
+}
+
 .cover-divider {
   width: 120px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin-bottom: 2rem;
 }
@@ -226,6 +292,27 @@ body {
 }
 .cover-author-signature {
   font-family: 'Aref Ruqaa', serif; font-size: 2.2rem; color: var(--gold-bright); opacity: 0.85; font-weight: 700;
+}
+
+/* 2. سهم نزول متذبذب أسفل الغلاف */
+.scroll-down-btn {
+  position: absolute;
+  bottom: 25px; left: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--gold-bright);
+  text-decoration: none;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  animation: bounceArrow 2.5s infinite;
+}
+@keyframes bounceArrow {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-8px); }
+  60% { transform: translateY(-4px); }
 }
 
 /* ══════════════════════════════════════════
@@ -242,26 +329,57 @@ body {
 .paragraph-luxury {
   font-family: 'Aref Ruqaa', serif; font-size: clamp(1.2rem, 2.4vw, 1.55rem); line-height: 2.1; color: var(--ink-light);
 }
+
+/* 12. الاقتباسات داخل قوسين كبيرين وخلفية ذهبية شفافة */
 .pull-quote-box {
   border-right: 4px solid var(--gold); padding: 1.5rem 2rem; margin: 3rem 0;
-  background: rgba(197, 160, 67, 0.03); position: relative;
+  background: rgba(197, 160, 67, 0.05); position: relative;
 }
 .pull-quote-box::before {
-  content: '❝'; position: absolute; top: -0.8rem; right: 0.5rem; font-size: 3rem; color: rgba(197, 160, 67, 0.15); font-family: Georgia, serif;
+  content: '❝'; position: absolute; top: -0.5rem; right: 0.5rem; font-size: 2.5rem; color: rgba(197, 160, 67, 0.3); font-family: Georgia, serif;
 }
+.pull-quote-box::after {
+  content: '❞'; position: absolute; bottom: -1.5rem; left: 0.5rem; font-size: 2.5rem; color: rgba(197, 160, 67, 0.3); font-family: Georgia, serif;
+}
+
 .handwritten-note {
   font-family: 'Great Vibes', cursive; font-size: 1.8rem; color: var(--crimson); opacity: 0.75; transform: rotate(-2deg); display: inline-block; margin-top: 1rem;
 }
 
-/* Tape Frame for Artwork Placement */
-.art-container {
-  position: relative; margin: 3rem auto; max-width: 520px; width: 100%;
+/* 6. حواف ورق عتيق وملمس حقيقي (تمت ترقيته عبر ظلال مدمجة وبقع خفيفة بالخلفية) */
+.page {
+  background-image: 
+    url('https://www.transparenttextures.com/patterns/parchment.png'),
+    radial-gradient(circle at 15% 15%, rgba(139, 115, 85, 0.03) 0%, transparent 25%),
+    radial-gradient(circle at 85% 80%, rgba(115, 77, 38, 0.04) 0%, transparent 20%);
 }
+
+/* 8, 9, 10. الصور: حركة للأعلى والأسفل، دوران خفيف، وتأثير لمعان مشع */
 .art-frame {
   width: 100%; position: relative; background: #fff;
   padding: 12px 12px 45px 12px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.15), 0 2px 5px rgba(0,0,0,0.05);
-  transition: var(--transition-smooth);
+  animation: photoFloat 6s ease-in-out infinite alternate;
+}
+@keyframes photoFloat {
+  0% { transform: translateY(0px) rotate(0.5deg); }
+  100% { transform: translateY(-6px) rotate(-0.5deg); }
+}
+
+.art-frame::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), rgba(236, 195, 103, 0.1), transparent);
+  transform: skewX(-20deg) translateX(-150%);
+  animation: shineImage 5s infinite ease-in-out;
+}
+@keyframes shineImage {
+  0% { transform: skewX(-20deg) translateX(-150%); }
+  20% { transform: skewX(-20deg) translateX(150%); }
+  100% { transform: skewX(-20deg) translateX(150%); }
+}
+
+.art-container {
+  position: relative; margin: 3rem auto; max-width: 520px; width: 100%;
 }
 .art-frame img { width: 100%; height: auto; display: block; filter: sepia(10%) contrast(102%); }
 .art-caption {
@@ -275,9 +393,7 @@ body {
 .tape-strip.top-right { top: -12px; right: -20px; transform: rotate(32deg); }
 .tape-strip.bottom-left { bottom: -12px; left: -20px; transform: rotate(35deg); }
 
-/* ══════════════════════════════════════════
-   CALL TO ACTION & HUMANITARIAN SECTION
-══════════════════════════════════════════ */
+/* ─────────────── CALL TO ACTION & HUMANITARIAN SECTION ─────────────── */
 .wax-seal-emblem {
   width: 80px; height: 80px; border-radius: 50%;
   background: radial-gradient(circle at 30% 30%, #a63a2b, #59160e);
@@ -293,15 +409,19 @@ body {
   box-shadow: 0 15px 40px rgba(197, 160, 67, 0.25); transition: all 0.4s ease;
   margin: 0.5rem;
 }
+/* 16. Hover للزر: يكبر 3% ويصبح أكثر لمعاناً */
 .btn-premium:hover {
-  transform: translateY(-3px); box-shadow: 0 25px 50px rgba(197, 160, 67, 0.4);
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 25px 50px rgba(197, 160, 67, 0.45);
+  filter: brightness(1.1);
 }
+
 .btn-secondary-luxury {
   display: inline-block; font-family: 'Cairo', sans-serif; font-weight: 600; font-size: 0.95rem;
   color: var(--ink-dark); border: 1px solid var(--gold); padding: 1.1rem 3rem; text-decoration: none;
   border-radius: 4px; transition: all 0.4s ease; margin: 0.5rem;
 }
-.btn-secondary-luxury:hover { background: rgba(197, 160, 67, 0.05); }
+.btn-secondary-luxury:hover { background: rgba(197, 160, 67, 0.05); transform: scale(1.03); }
 
 .humanitarian-card {
   border: 1px dashed var(--gold); padding: 3rem; background: rgba(255, 255, 255, 0.5);
@@ -312,6 +432,43 @@ body {
   background: var(--paper-light); padding: 0 15px; color: var(--gold);
 }
 
+/* 🗺️ إضافات Awwwards: الجدول الزمني (Timeline) الكلاسيكي الوقور */
+.timeline-box {
+  display: flex; flex-direction: column; align-items: center; margin-top: 3rem; padding: 2rem 0;
+  position: relative;
+}
+.timeline-box::before {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(197, 160, 67, 0.3);
+}
+.timeline-node {
+  text-align: center; margin: 20px 0; position: relative; background: transparent; z-index: 5;
+}
+.node-year {
+  font-family: 'Cinzel', serif; font-size: 1.6rem; color: var(--gold-dim); font-weight: bold;
+}
+.node-desc {
+  font-family: 'Aref Ruqaa', serif; font-size: 1.2rem; color: var(--ink-light); margin-top: 4px;
+}
+.node-arrow {
+  color: var(--gold); margin-top: 8px; font-size: 1.1rem;
+}
+
+/* زر العودة للأعلى (على شكل ختم شمعي عتيق يسار الشاشة) */
+#back-to-top {
+  position: fixed; bottom: 30px; left: 30px;
+  width: 55px; height: 55px;
+  background: radial-gradient(circle at 30% 30%, #8b1c1c, #4a0d0d);
+  color: var(--gold-bright); border-radius: 50%;
+  display: flex; justify-content: center; align-items: center;
+  font-size: 1.3rem; text-decoration: none;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 0 10px rgba(0,0,0,0.5);
+  border: 1px solid #3c0b0b;
+  opacity: 0; visibility: hidden;
+  transition: all 0.3s ease; z-index: 99;
+}
+#back-to-top.show { opacity: 1; visibility: visible; }
+#back-to-top:hover { transform: scale(1.08); filter: brightness(1.1); }
+
 /* ─────────────── RESPONSIVE ─────────────── */
 @media (max-width: 850px) {
   .cover-container { flex-direction: column; }
@@ -321,17 +478,41 @@ body {
   .page::before { width: 2rem; }
 }
 
-footer {
-  background: #060503; padding: 4rem 2rem; text-align: center; border-top: 1px solid rgba(197, 160, 67, 0.05);
+/* 📜 الفوتر السينمائي الشامل والمطور الفاخر لـ Bluray Media */
+.cinematic-footer {
+  background: #060503; padding: 5rem 2rem; text-align: center; border-top: 1px solid rgba(197, 160, 67, 0.05);
 }
-footer .title { font-family: 'Aref Ruqaa', serif; font-size: 2rem; font-weight: 700; color: var(--gold-bright); margin-bottom: 0.5rem; }
-footer .meta { font-family: 'Cinzel', serif; font-size: 0.65rem; color: var(--ink-faint); letter-spacing: 0.2em; }
+.footer-divider-line {
+  width: 60px; height: 1px; background: var(--gold-dim); margin: 1.5rem auto; opacity: 0.4;
+}
+.footer-brand-ar {
+  font-family: 'Aref Ruqaa', serif; font-size: 2.2rem; font-weight: 700; color: var(--gold-bright); margin-bottom: 0.5rem;
+}
+.footer-sub {
+  font-family: 'Cinzel', serif; font-size: 0.9rem; color: var(--ink-faint); letter-spacing: 0.05em; font-style: italic; margin-bottom: 2.5rem;
+}
+.footer-grid {
+  display: flex; flex-direction: column; gap: 20px; max-width: 500px; margin: 0 auto 3rem auto;
+}
+.footer-role {
+  color: var(--gold); font-size: 0.75rem; font-family: 'Cinzel', serif; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;
+}
+.footer-name {
+  color: #ccbeaa; font-family: 'Cinzel', serif; font-size: 1.1rem; font-weight: 600;
+}
+.footer-meta {
+  font-family: 'Cairo', sans-serif; font-size: 0.8rem; color: #443c2e; margin-top: 2rem;
+}
 
 </style>
 </head>
 <body>
 
-<!-- Custom Premium Elements -->
+<div id="cinema-loader">
+  <div class="loader-text" id="phrase1">بين وبائين…</div>
+  <div class="loader-text" id="phrase2">ولادة ثالثة</div>
+</div>
+
 <div id="cur"></div>
 <div id="cur-r"></div>
 <div id="prog"></div>
@@ -339,13 +520,9 @@ footer .meta { font-family: 'Cinzel', serif; font-size: 0.65rem; color: var(--in
 
 <div class="notebook">
 
-  <!-- ══════════════════════════════════════════
-       PAGE 1: THE LUXURY CINEMATIC COVER
-  ══════════════════════════════════════════ -->
   <section class="page" id="p1">
     <div class="cover-container">
       
-      <!-- Visual Side -->
       <div class="cover-visual-side">
         <div class="ambient-glow"></div>
         <div class="luxury-frame reveal">
@@ -357,10 +534,9 @@ footer .meta { font-family: 'Cinzel', serif; font-size: 0.65rem; color: var(--in
         </div>
       </div>
 
-      <!-- Info Side -->
       <div class="cover-info-side">
         <div class="cover-tag">رواية إنسانية مأخوذة عن قصة حقيقية</div>
-        <h1 class="cover-main-title">صدى<br><span>العطاء</span></h1>
+        <h1 class="cover-main-title" id="easter-egg-target" style="cursor: pointer;">صدى<br><span>العطاء</span></h1>
         <div class="cover-divider"></div>
         <p class="cover-description">
           بين وبائين ولادة ثالثة...<br>
@@ -369,12 +545,14 @@ footer .meta { font-family: 'Cinzel', serif; font-size: 0.65rem; color: var(--in
         <div class="cover-author-signature">بسام باسم</div>
       </div>
 
+      <a href="#p2" class="scroll-down-btn">
+        <span>Scroll to Begin</span>
+        <span style="font-size: 1.2rem; margin-top: 2px;">↓</span>
+      </a>
+
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════════
-       PAGE 2: CHAPTER I -- THE SILENCE
-  ══════════════════════════════════════════ -->
   <section class="page" id="p2">
     <div class="ruled-lines"></div>
     <div class="page-inner">
@@ -385,23 +563,20 @@ footer .meta { font-family: 'Cinzel', serif; font-size: 0.65rem; color: var(--in
       </h2>
 
       <p class="paragraph-luxury reveal">
-        <span class="w">كان</span> <span class="w">الصمت</span> <span class="w">في</span> <span class="w">شوارع</span> <span class="w">بغداد</span> <span class="w">وبابل</span> <span class="w">شيئاً</span> <span class="w">لم</span> <span class="w">تألفه</span> <span class="w">القلوب</span> <span class="w">من</span> <span class="w">قبل.</span> <span class="w">وباءٌ</span> <span class="w">يمتص</span> <span class="w">الحياة،</span> <span class="w">وخوفٌ</span> <span class="w">يختبئ</span> <span class="w">خلف</span> <span class="w">الأبواب</span> <span class="w">الموصدة.</span>
+        <span class="w">كان</span> <span class="w">الصمت</span> <span class="w">في</span> <span class="w">شوارع</span> <span class="w">مدينة</span> <span class="w">بابل</span> <span class="w">شيئاً</span> <span class="w">لم</span> <span class="w">تألفه</span> <span class="w">القلوب</span> <span class="w">من</span> <span class="w">قبل.</span> <span class="w">وباءٌ</span> <span class="w">يمتص</span> <span class="w">الحياة،</span> <span class="w">وخوفٌ</span> <span class="w">يختبئ</span> <span class="w">خلف</span> <span class="w">الأبواب</span> <span class="w">الموصدة.</span>
       </p>
 
       <div class="pull-quote-box reveal">
         <p class="paragraph-luxury" style="color: var(--gold-dim); font-style: italic;">
-          "توقفت الساعات, شُلّت حركات المارة، لكن نبض العطاء الإنساني أبى أن يدخل حيز الركود."
+          "توقفت الساعات, شُلّت حركات المارة، لكن صدى العطاء الإنساني أبى أن يدخل حيز الركود."
         </p>
       </div>
 
       <div class="handwritten-note reveal">دُوّن في لحظة ترقب...</div>
     </div>
-    <div class="pg-num">II</div>
+    <div class="pg-num">-- II --</div>
   </section>
 
-  <!-- ══════════════════════════════════════════
-       PAGE 3: THE PROMOTIONAL MASTERPIECE
-  ══════════════════════════════════════════ -->
   <section class="page" id="p3">
     <div class="ruled-lines"></div>
     <div class="page-inner">
@@ -409,7 +584,6 @@ footer .meta { font-family: 'Cinzel', serif; font-size: 0.65rem; color: var(--in
 
       <div style="display: flex; flex-wrap: wrap; gap: 3rem; align-items: center;">
         
-        <!-- Documenting the Event -->
         <div style="flex: 1; min-width: 280px;">
           <div class="art-container reveal">
             <div class="tape-strip top-right"></div>
@@ -431,12 +605,9 @@ footer .meta { font-family: 'Cinzel', serif; font-size: 0.65rem; color: var(--in
 
       </div>
     </div>
-    <div class="pg-num">III</div>
+    <div class="pg-num">-- III --</div>
   </section>
 
-  <!-- ══════════════════════════════════════════
-       PAGE 4: THE PRINT & PRODUCTION ART
-  ══════════════════════════════════════════ -->
   <section class="page" id="p4">
     <div class="ruled-lines"></div>
     <div class="page-inner">
@@ -444,7 +615,6 @@ footer .meta { font-family: 'Cinzel', serif; font-size: 0.65rem; color: var(--in
 
       <div style="display: flex; flex-wrap: wrap; gap: 3rem; align-items: center; flex-direction: row-reverse;">
         
-        <!-- Documenting production -->
         <div style="flex: 1; min-width: 280px;">
           <div class="art-container reveal">
             <div class="tape-strip top-right" style="background: rgba(143,45,33,0.2);"></div>
@@ -464,12 +634,9 @@ footer .meta { font-family: 'Cinzel', serif; font-size: 0.65rem; color: var(--in
 
       </div>
     </div>
-    <div class="pg-num">IV</div>
+    <div class="pg-num">-- IV --</div>
   </section>
 
-  <!-- ══════════════════════════════════════════
-       PAGE 5: THE GRAND HUMANITARIAN VISION (CTA)
-  ══════════════════════════════════════════ -->
   <section class="page" id="p5" style="background: var(--paper-light);">
     <div class="ruled-lines"></div>
     <div class="page-inner" style="text-align: center; align-items: center;">
@@ -486,7 +653,6 @@ footer .meta { font-family: 'Cinzel', serif; font-size: 0.65rem; color: var(--in
         باقتنائك لنسختك من رواية <strong style="color:var(--ink-dark);">"صدى العطاء"</strong>، أنت لا تشتري كتاباً فحسب، بل تساهم بشكل مباشر وحقيقي في تمويل ودعم برامج ورعاية أطفالنا الأبطال.
       </p>
 
-      <!-- قسم الأزرار المحدثة بالروابط الجديدة -->
       <div class="reveal" style="margin-bottom: 2rem;">
         <a href="https://wa.me/9647869999666" target="_blank" class="btn-premium">طلب النسخة الآن</a>
         <a href="https://myqrcode.mobi/qr/cda62375/view" target="_blank" class="btn-secondary-luxury">تواصل معنا مباشر</a>
@@ -498,24 +664,86 @@ footer .meta { font-family: 'Cinzel', serif; font-size: 0.65rem; color: var(--in
         </p>
       </div>
 
+      <div class="timeline-box reveal" style="width: 100%; max-width: 600px;">
+        <div class="timeline-node">
+          <div class="node-year">2020</div>
+          <div class="node-desc">ظهور الوباء</div>
+          <div class="node-arrow">↓</div>
+        </div>
+        <div class="timeline-node">
+          <div class="node-year">2021</div>
+          <div class="node-desc">ولادة الفكرة</div>
+          <div class="node-arrow">↓</div>
+        </div>
+        <div class="timeline-node">
+          <div class="node-year">2023</div>
+          <div class="node-desc">التوثيق</div>
+          <div class="node-arrow">↓</div>
+        </div>
+        <div class="timeline-node">
+          <div class="node-year">2026</div>
+          <div class="node-desc">إطلاق الرواية</div>
+        </div>
+      </div>
+
       <p class="paragraph-luxury" style="font-size: 0.85rem; color: var(--ink-faint); margin-top: 3rem; font-family: 'Cinzel', serif;">
         DAR AL FARES FOR PUBLISHING &nbsp;·&nbsp; 009647715557768
       </p>
 
     </div>
-    <div class="pg-num">V</div>
+    <div class="pg-num">-- V --</div>
   </section>
 
 </div>
 
-<!-- FOOTER SECTION -->
-<footer>
-  <div class="title">صدى العطاء</div>
-  <div class="meta">All Rights Reserved © 2026 · Designed for Bluray Media Studios &fatima riyad abd alsahip & Dar Al Fares</div>
+<a href="#p1" id="back-to-top" title="العودة للأعلى">↑</a>
+
+<footer class="cinematic-footer">
+  <div class="footer-brand-ar">صدى العطاء</div>
+  <div class="footer-sub">A Humanitarian Story Inspired By True Events</div>
+  
+  <div class="footer-grid">
+    <div class="credit-block">
+      <div class="footer-role">Visual Content Agency</div>
+      <div class="footer-name">BLURAY MEDIA</div>
+    </div>
+    <div class="footer-divider-line"></div>
+    <div class="credit-block">
+      <div class="footer-role">Creative Director</div>
+      <div class="footer-name">Fatima Riyad Abd Alsahip</div>
+    </div>
+    <div class="footer-divider-line"></div>
+    <div class="credit-block">
+      <div class="footer-role">In Collaboration With</div>
+      <div class="footer-name">Dar Al Fares Publishing House</div>
+    </div>
+    <div class="footer-divider-line"></div>
+    <div class="credit-block">
+      <div class="footer-role">Origin</div>
+      <div class="footer-name">Baghdad • Babylon • Iraq</div>
+    </div>
+  </div>
+  
+  <div class="footer-meta">
+    All Rights Reserved © 2026
+  </div>
 </footer>
 
 <script>
 "use strict";
+
+/* ─────────────── أداء واختفاء الشاشة الافتتاحية السينمائية (Loader) ─────────────── */
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const loader = document.getElementById('cinema-loader');
+    loader.style.transition = "opacity 0.8s ease, filter 0.8s ease";
+    loader.style.opacity = "0";
+    loader.style.filter = "blur(15px)";
+    setTimeout(() => {
+      loader.style.display = "none";
+    }, 800);
+  }, 7000); // مدة عرض النصين المتتاليين بشكل متناسق مع الحركة
+});
 
 /* ─────────────── CUSTOM INTERACTIVE CURSOR ─────────────── */
 const cur = document.getElementById('cur');
@@ -542,6 +770,14 @@ window.addEventListener('scroll', () => {
   const scrollTotal = document.body.scrollHeight - window.innerHeight;
   const currentScroll = window.scrollY;
   document.getElementById('prog').style.width = (currentScroll / scrollTotal * 100) + '%';
+  
+  // إظهار زر الختم الشمعي للعودة للأعلى عند تخطي السكرول 400 بكسل
+  const btt = document.getElementById('back-to-top');
+  if (currentScroll > 400) {
+    btt.classList.add('show');
+  } else {
+    btt.classList.remove('show');
+  }
 });
 
 /* ─────────────── PREMIUM SCROLL ENTRANCE REVEAL ENGINE ─────────────── */
@@ -583,6 +819,16 @@ document.querySelectorAll('.page').forEach(page => {
   page.addEventListener('mouseleave', () => {
     page.style.transform = `rotateY(0deg) rotateX(0deg) translateY(0px)`;
   });
+});
+
+/* ─────────────── 19. بيضة الفصح (Easter Egg) عند الضغط 5 مرات متتالية ─────────────── */
+let eggClickCount = 0;
+document.getElementById('easter-egg-target').addEventListener('click', () => {
+  eggClickCount++;
+  if (eggClickCount === 5) {
+    alert("شكراً لأنك جزء من هذا الأثر الإنساني ❤️");
+    eggClickCount = 0;
+  }
 });
 </script>
 
