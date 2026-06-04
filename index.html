@@ -1,0 +1,590 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>صدى العطاء -- بين وبائين ولادة ثالثة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- تضمين خط عارف رقعة الرسمي والخطوط المساعدة -->
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Cairo:wght@200;300;400;600;700&display=swap" rel="stylesheet">
+<style>
+
+/* ─────────────── TOKENS & VARIABLES ─────────────── */
+:root {
+  --bg-dark:     #0d0b07;
+  --paper-light: #f9f5eb;
+  --paper-aged:  #f3ede0;
+  --paper-dark:  #e6dcbf;
+  --ink-dark:    #16120c;
+  --ink-light:   #3d3323;
+  --ink-faint:   #8c7b5e;
+  --gold:        #c5a043;
+  --gold-bright: #ecc367;
+  --gold-dim:    #7c6328;
+  --crimson:     #8f2d21;
+  --shadow-deep: rgba(13, 11, 7, 0.35);
+  --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─────────────── RESET & BASE ─────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background-color: var(--bg-dark);
+  color: var(--ink-dark);
+  font-family: 'Cairo', sans-serif;
+  overflow-x: hidden;
+  perspective: 1000px;
+}
+
+/* ─────────────── CUSTOM LUXURY CURSOR ─────────────── */
+#cur {
+  position: fixed; width: 8px; height: 8px;
+  background: var(--gold-bright); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: transform 0.1s ease;
+}
+#cur-r {
+  position: fixed; width: 40px; height: 40px;
+  border: 1px solid rgba(236, 195, 103, 0.4);
+  border-radius: 50%; pointer-events: none; z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media(max-width: 768px){ #cur, #cur-r { display: none; } body { cursor: auto; } }
+
+/* ─────────────── PROGRESS BAR ─────────────── */
+#prog {
+  position: fixed; top: 0; right: 0; height: 3px;
+  background: linear-gradient(270deg, var(--gold-dim), var(--gold-bright), var(--gold));
+  z-index: 9000; width: 0%;
+  box-shadow: 0 2px 10px rgba(236, 195, 103, 0.3);
+}
+
+/* ─────────────── GLOBAL CINEMATIC GRAIN & LIGHT ─────────────── */
+#grain {
+  position: fixed; inset: 0; z-index: 8500; pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.ambient-glow {
+  position: absolute; width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(197, 160, 67, 0.06) 0%, transparent 70%);
+  border-radius: 50%; pointer-events: none; z-index: 1;
+}
+
+/* ══════════════════════════════════════════
+   BOOK JOURNAL LAYOUT SYSTEM
+══════════════════════════════════════════ */
+.notebook {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 4rem 1rem;
+}
+
+.page {
+  position: relative;
+  background: var(--paper-light);
+  min-height: 90vh;
+  padding: 6rem 5rem 6rem 7rem;
+  margin-bottom: 4rem;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 
+    0 30px 70px rgba(0, 0, 0, 0.4),
+    inset 2px 0 10px rgba(255,255,255,0.5),
+    -10px 0 20px rgba(0,0,0,0.15);
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.page:nth-child(even) {
+  background: var(--paper-aged);
+}
+
+/* The Spine Effect (Gutter Binding) */
+.page::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0; width: 5rem;
+  background: linear-gradient(to right, rgba(22, 18, 12, 0.15) 0%, rgba(22, 18, 12, 0.05) 50%, transparent 100%);
+  border-right: 1px solid rgba(22, 18, 12, 0.08);
+  z-index: 10; pointer-events: none;
+}
+
+/* Margin Red Line */
+.page::after {
+  content: '';
+  position: absolute;
+  left: 5.5rem; top: 0; bottom: 0; width: 1px;
+  background: rgba(143, 45, 33, 0.18);
+  z-index: 10; pointer-events: none;
+}
+
+/* Ruled Lines Texture */
+.ruled-lines {
+  position: absolute;
+  inset: 0; pointer-events: none; z-index: 2;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 33px,
+    rgba(22, 18, 12, 0.04) 33px,
+    rgba(22, 18, 12, 0.04) 34px
+  );
+  background-position: 0 5.5rem;
+}
+
+.page-inner {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(90vh - 12rem);
+}
+
+/* Page Numbers */
+.pg-num {
+  position: absolute;
+  bottom: 2rem; left: 50%; transform: translateX(-50%);
+  font-family: 'Cinzel', serif; font-size: 0.75rem; font-weight: 600;
+  color: var(--ink-faint); letter-spacing: 0.3em;
+}
+
+/* ─────────────── REVEAL ANIMATIONS ─────────────── */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+.w { display: inline-block; opacity: 0; transform: translateY(15px); transition: var(--transition-smooth); }
+.w.visible { opacity: 1; transform: translateY(0); }
+
+/* ══════════════════════════════════════════
+   HERO SCREEN (PAGE 1)
+══════════════════════════════════════════ */
+#p1 {
+  background: linear-gradient(135deg, #14110a 0%, #060503 100%);
+  padding: 0; display: flex; align-items: stretch; min-height: 95vh;
+}
+#p1::before, #p1::after { display: none; }
+
+.cover-container {
+  display: flex; width: 100%; position: relative;
+}
+.cover-visual-side {
+  flex: 1; display: flex; align-items: center; justify-content: center; position: relative; padding: 3rem;
+}
+.cover-info-side {
+  flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 5rem 4rem;
+  border-right: 1px solid rgba(197, 160, 67, 0.1);
+}
+
+/* Elegant Media Frame */
+.luxury-frame {
+  width: min(360px, 90%);
+  position: relative;
+  border-radius: 8px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.7);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.luxury-frame:hover {
+  transform: scale(1.03) rotate(-1deg);
+}
+.luxury-frame img {
+  width: 100%; height: auto; display: block; border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Decorative Framing Corners */
+.frame-corner {
+  position: absolute; width: 16px; height: 16px; border: 2px solid var(--gold); z-index: 10;
+}
+.frame-corner.tl { top: -6px; left: -6px; border-right: none; border-bottom: none; }
+.frame-corner.tr { top: -6px; right: -6px; border-left: none; border-bottom: none; }
+.frame-corner.bl { bottom: -6px; left: -6px; border-right: none; border-top: none; }
+.frame-corner.br { bottom: -6px; right: -6px; border-left: none; border-top: none; }
+
+/* Typography */
+.cover-tag {
+  font-family: 'Aref Ruqaa', serif; font-size: 1rem; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 1.5rem;
+}
+.cover-main-title {
+  font-family: 'Aref Ruqaa', serif; font-size: clamp(3.5rem, 7vw, 5rem); color: #fff; line-height: 1.15; font-weight: 700;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.5); margin-bottom: 1.5rem;
+}
+.cover-main-title span { color: var(--gold-bright); }
+.cover-divider {
+  width: 120px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin-bottom: 2rem;
+}
+.cover-description {
+  font-family: 'Aref Ruqaa', serif; font-size: clamp(1.2rem, 2.2vw, 1.5rem); line-height: 2; color: #ccbeaa; margin-bottom: 3rem;
+}
+.cover-author-signature {
+  font-family: 'Aref Ruqaa', serif; font-size: 2.2rem; color: var(--gold-bright); opacity: 0.85; font-weight: 700;
+}
+
+/* ══════════════════════════════════════════
+   INSIDE PAGES TYPOGRAPHY & ELEMENTS
+══════════════════════════════════════════ */
+.stamp-badge {
+  display: inline-block; font-family: 'Cinzel', serif; font-size: 0.65rem; font-weight: 700;
+  color: var(--gold-dim); border: 1px solid rgba(124, 99, 40, 0.3);
+  padding: 0.4rem 1.2rem; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 2.5rem;
+}
+.headline-huge {
+  font-family: 'Aref Ruqaa', serif; font-size: clamp(2.5rem, 6vw, 4rem); line-height: 1.2; font-weight: 700; color: var(--ink-dark);
+}
+.paragraph-luxury {
+  font-family: 'Aref Ruqaa', serif; font-size: clamp(1.2rem, 2.4vw, 1.55rem); line-height: 2.1; color: var(--ink-light);
+}
+.pull-quote-box {
+  border-right: 4px solid var(--gold); padding: 1.5rem 2rem; margin: 3rem 0;
+  background: rgba(197, 160, 67, 0.03); position: relative;
+}
+.pull-quote-box::before {
+  content: '❝'; position: absolute; top: -0.8rem; right: 0.5rem; font-size: 3rem; color: rgba(197, 160, 67, 0.15); font-family: Georgia, serif;
+}
+.handwritten-note {
+  font-family: 'Great Vibes', cursive; font-size: 1.8rem; color: var(--crimson); opacity: 0.75; transform: rotate(-2deg); display: inline-block; margin-top: 1rem;
+}
+
+/* Tape Frame for Artwork Placement */
+.art-container {
+  position: relative; margin: 3rem auto; max-width: 520px; width: 100%;
+}
+.art-frame {
+  width: 100%; position: relative; background: #fff;
+  padding: 12px 12px 45px 12px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15), 0 2px 5px rgba(0,0,0,0.05);
+  transition: var(--transition-smooth);
+}
+.art-frame img { width: 100%; height: auto; display: block; filter: sepia(10%) contrast(102%); }
+.art-caption {
+  position: absolute; bottom: 12px; left: 0; right: 0; text-align: center;
+  font-family: 'Aref Ruqaa', serif; font-size: 1.05rem; color: var(--ink-faint); font-style: italic;
+}
+.tape-strip {
+  position: absolute; width: 100px; height: 26px; background: rgba(230, 215, 180, 0.6);
+  backdrop-filter: blur(1px); box-shadow: 0 2px 5px rgba(0,0,0,0.02); z-index: 20;
+}
+.tape-strip.top-right { top: -12px; right: -20px; transform: rotate(32deg); }
+.tape-strip.bottom-left { bottom: -12px; left: -20px; transform: rotate(35deg); }
+
+/* ══════════════════════════════════════════
+   CALL TO ACTION & HUMANITARIAN SECTION
+══════════════════════════════════════════ */
+.wax-seal-emblem {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #a63a2b, #59160e);
+  border: 1px solid rgba(255,255,255,0.1); margin: 0 auto 2rem;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.7); font-size: 1.5rem; font-family: 'Aref Ruqaa', serif; font-weight: 700;
+}
+.btn-premium {
+  display: inline-block; font-family: 'Cairo', sans-serif; font-weight: 700; font-size: 1rem;
+  letter-spacing: 0.05em; color: #fff; background: linear-gradient(135deg, #7c6328 0%, var(--gold) 50%, #99782a 100%);
+  padding: 1.2rem 3.5rem; text-decoration: none; border-radius: 4px;
+  box-shadow: 0 15px 40px rgba(197, 160, 67, 0.25); transition: all 0.4s ease;
+  margin: 0.5rem;
+}
+.btn-premium:hover {
+  transform: translateY(-3px); box-shadow: 0 25px 50px rgba(197, 160, 67, 0.4);
+}
+.btn-secondary-luxury {
+  display: inline-block; font-family: 'Cairo', sans-serif; font-weight: 600; font-size: 0.95rem;
+  color: var(--ink-dark); border: 1px solid var(--gold); padding: 1.1rem 3rem; text-decoration: none;
+  border-radius: 4px; transition: all 0.4s ease; margin: 0.5rem;
+}
+.btn-secondary-luxury:hover { background: rgba(197, 160, 67, 0.05); }
+
+.humanitarian-card {
+  border: 1px dashed var(--gold); padding: 3rem; background: rgba(255, 255, 255, 0.5);
+  margin-top: 4rem; position: relative; border-radius: 4px;
+}
+.humanitarian-card::before {
+  content: '✦'; position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+  background: var(--paper-light); padding: 0 15px; color: var(--gold);
+}
+
+/* ─────────────── RESPONSIVE ─────────────── */
+@media (max-width: 850px) {
+  .cover-container { flex-direction: column; }
+  .cover-info-side { padding: 4rem 2rem; border-right: none; border-top: 1px solid rgba(197, 160, 67, 0.1); }
+  .page { padding: 5rem 2rem 5rem 3rem; }
+  .page::after { left: 2.2rem; }
+  .page::before { width: 2rem; }
+}
+
+footer {
+  background: #060503; padding: 4rem 2rem; text-align: center; border-top: 1px solid rgba(197, 160, 67, 0.05);
+}
+footer .title { font-family: 'Aref Ruqaa', serif; font-size: 2rem; font-weight: 700; color: var(--gold-bright); margin-bottom: 0.5rem; }
+footer .meta { font-family: 'Cinzel', serif; font-size: 0.65rem; color: var(--ink-faint); letter-spacing: 0.2em; }
+
+</style>
+</head>
+<body>
+
+<!-- Custom Premium Elements -->
+<div id="cur"></div>
+<div id="cur-r"></div>
+<div id="prog"></div>
+<div id="grain"></div>
+
+<div class="notebook">
+
+  <!-- ══════════════════════════════════════════
+       PAGE 1: THE LUXURY CINEMATIC COVER
+  ══════════════════════════════════════════ -->
+  <section class="page" id="p1">
+    <div class="cover-container">
+      
+      <!-- Visual Side -->
+      <div class="cover-visual-side">
+        <div class="ambient-glow"></div>
+        <div class="luxury-frame reveal">
+          <div class="frame-corner tl"></div>
+          <div class="frame-corner tr"></div>
+          <div class="frame-corner bl"></div>
+          <div class="frame-corner br"></div>
+          <img src="https://i.top4top.io/p_3806nik130.jpg" alt="صدى العطاء غلاف">
+        </div>
+      </div>
+
+      <!-- Info Side -->
+      <div class="cover-info-side">
+        <div class="cover-tag">رواية إنسانية مأخوذة عن قصة حقيقية</div>
+        <h1 class="cover-main-title">صدى<br><span>العطاء</span></h1>
+        <div class="cover-divider"></div>
+        <p class="cover-description">
+          بين وبائين ولادة ثالثة...<br>
+          توثيق تراجيدي ملهم يجسد صراع الإنسان والوجع في فترات الأزمات، وكيف يولد الأمل ناصعاً من عمق المعاناة.
+        </p>
+        <div class="cover-author-signature">بسام باسم</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE 2: CHAPTER I -- THE SILENCE
+  ══════════════════════════════════════════ -->
+  <section class="page" id="p2">
+    <div class="ruled-lines"></div>
+    <div class="page-inner">
+      <div class="stamp-badge reveal">Chapter I &nbsp;·&nbsp; صمت الأزقة</div>
+      
+      <h2 class="headline-huge reveal" style="margin-bottom: 2rem;">
+        <span class="w">حينما</span> <span class="w">أطبقت</span> <span class="w">المدينة</span> <span class="w">أنفاسها</span>
+      </h2>
+
+      <p class="paragraph-luxury reveal">
+        <span class="w">كان</span> <span class="w">الصمت</span> <span class="w">في</span> <span class="w">شوارع</span> <span class="w">بغداد</span> <span class="w">وبابل</span> <span class="w">شيئاً</span> <span class="w">لم</span> <span class="w">تألفه</span> <span class="w">القلوب</span> <span class="w">من</span> <span class="w">قبل.</span> <span class="w">وباءٌ</span> <span class="w">يمتص</span> <span class="w">الحياة،</span> <span class="w">وخوفٌ</span> <span class="w">يختبئ</span> <span class="w">خلف</span> <span class="w">الأبواب</span> <span class="w">الموصدة.</span>
+      </p>
+
+      <div class="pull-quote-box reveal">
+        <p class="paragraph-luxury" style="color: var(--gold-dim); font-style: italic;">
+          "توقفت الساعات, شُلّت حركات المارة، لكن نبض العطاء الإنساني أبى أن يدخل حيز الركود."
+        </p>
+      </div>
+
+      <div class="handwritten-note reveal">دُوّن في لحظة ترقب...</div>
+    </div>
+    <div class="pg-num">II</div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE 3: THE PROMOTIONAL MASTERPIECE
+  ══════════════════════════════════════════ -->
+  <section class="page" id="p3">
+    <div class="ruled-lines"></div>
+    <div class="page-inner">
+      <div class="stamp-badge reveal">المحفل الإنساني والأثر</div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 3rem; align-items: center;">
+        
+        <!-- Documenting the Event -->
+        <div style="flex: 1; min-width: 280px;">
+          <div class="art-container reveal">
+            <div class="tape-strip top-right"></div>
+            <div class="tape-strip bottom-left"></div>
+            <div class="art-frame">
+              <img src="https://j.top4top.io/p_3806xkl3h1.jpg" alt="بوستر صدى العطاء">
+              <div class="art-caption">إعلان حفل توقيع وإطلاق الرواية المباركة</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex: 1.2; min-width: 280px;">
+          <h3 class="headline-huge" style="font-size: 2rem; margin-bottom: 1.5rem;">حكاية تُقرأ بالقلوب قبل الأعين</h3>
+          <p class="paragraph-luxury" style="color: var(--ink-light);">
+            لم يكن هذا العمل ترفاً فكرياً، بل صرخة إنسانية وثقت تضحيات أبطال الميدان، وخطوط الدفاع الأولى من الكوادر الطبية والإنسانية الذين جابهوا وطأة الجائحة بكل جسارة.
+          </p>
+          <div class="handwritten-note" style="color: var(--gold-dim); margin-top: 1.5rem;">حضورٌ يخلد التضامن الإنساني الأصيل...</div>
+        </div>
+
+      </div>
+    </div>
+    <div class="pg-num">III</div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE 4: THE PRINT & PRODUCTION ART
+  ══════════════════════════════════════════ -->
+  <section class="page" id="p4">
+    <div class="ruled-lines"></div>
+    <div class="page-inner">
+      <div class="stamp-badge reveal">من المطبعة إلى يد القارئ</div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 3rem; align-items: center; flex-direction: row-reverse;">
+        
+        <!-- Documenting production -->
+        <div style="flex: 1; min-width: 280px;">
+          <div class="art-container reveal">
+            <div class="tape-strip top-right" style="background: rgba(143,45,33,0.2);"></div>
+            <div class="art-frame" style="transform: rotate(1deg);">
+              <img src="https://k.top4top.io/p_3806f2xly2.jpg" alt="نسخ مطبوعة من صدى العطاء">
+              <div class="art-caption">دار الفارس -- خروج المطبوعات الأولى للنور</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex: 1.2; min-width: 280px;">
+          <h3 class="headline-huge" style="font-size: 2rem; margin-bottom: 1.5rem;">ولادة الحرف والكلمة</h3>
+          <p class="paragraph-luxury">
+            بين صفحات هذا الكتاب، ترقد تفاصيل ومواقف حية تفيض بالمشاعر الصادقة، مخلدةً ذكرى كل من غاب، ومانحةً دافعاً عظيماً للأمل لكل من بقي مكافحاً على هذه الأرض.
+          </p>
+        </div>
+
+      </div>
+    </div>
+    <div class="pg-num">IV</div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE 5: THE GRAND HUMANITARIAN VISION (CTA)
+  ══════════════════════════════════════════ -->
+  <section class="page" id="p5" style="background: var(--paper-light);">
+    <div class="ruled-lines"></div>
+    <div class="page-inner" style="text-align: center; align-items: center;">
+      
+      <div class="wax-seal-emblem reveal">عطاء</div>
+      <div class="stamp-badge reveal">دعوة للتغيير والأثر</div>
+
+      <h2 class="headline-huge reveal" style="margin-bottom: 1rem;">امتلك أثرك الإنساني اليوم</h2>
+      <p class="paragraph-luxury t-gold" style="color: var(--gold-dim); font-size: 1.5rem; margin-bottom: 2.5rem;">
+        ريّع هذا العمل مبارك بالكامل لأجل الطفولة
+      </p>
+
+      <p class="paragraph-luxury reveal" style="max-width: 650px; color: var(--ink-light); margin-bottom: 3rem;">
+        باقتنائك لنسختك من رواية <strong style="color:var(--ink-dark);">"صدى العطاء"</strong>، أنت لا تشتري كتاباً فحسب، بل تساهم بشكل مباشر وحقيقي في تمويل ودعم برامج ورعاية أطفالنا الأبطال.
+      </p>
+
+      <!-- قسم الأزرار المحدثة بالروابط الجديدة -->
+      <div class="reveal" style="margin-bottom: 2rem;">
+        <a href="https://wa.me/9647869999666" target="_blank" class="btn-premium">طلب النسخة الآن</a>
+        <a href="https://myqrcode.mobi/qr/cda62375/view" target="_blank" class="btn-secondary-luxury">تواصل معنا مباشر</a>
+      </div>
+
+      <div class="humanitarian-card reveal" style="max-width: 700px; text-align: right;">
+        <p class="paragraph-luxury" style="font-size: 1.15rem; line-height: 2;">
+          تذهب عائدات مبيعات الرواية لدعم <strong style="color: var(--crimson);">مركز نبض العطاء للتأهيل النفسي والاجتماعي للأطفال المحاربين</strong>. مساهمتكم هي طاقة أمل جديدة وضمان لاستمرار تقديم الرعاية المتكاملة للأطفال وعائلاتهم ليتجاوزوا غصات الألم بسلام وشفاء.
+        </p>
+      </div>
+
+      <p class="paragraph-luxury" style="font-size: 0.85rem; color: var(--ink-faint); margin-top: 3rem; font-family: 'Cinzel', serif;">
+        DAR AL FARES FOR PUBLISHING &nbsp;·&nbsp; 009647715557768
+      </p>
+
+    </div>
+    <div class="pg-num">V</div>
+  </section>
+
+</div>
+
+<!-- FOOTER SECTION -->
+<footer>
+  <div class="title">صدى العطاء</div>
+  <div class="meta">All Rights Reserved © 2026 · Designed for Bluray Media Studios &fatima riyad abd alsahip & Dar Al Fares</div>
+</footer>
+
+<script>
+"use strict";
+
+/* ─────────────── CUSTOM INTERACTIVE CURSOR ─────────────── */
+const cur = document.getElementById('cur');
+const curR = document.getElementById('cur-r');
+let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+let ringX = mouseX, ringY = mouseY;
+
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  cur.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
+});
+
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.1;
+  ringY += (mouseY - ringY) * 0.1;
+  curR.style.transform = `translate(${ringX - 20}px, ${ringY - 20}px)`;
+  requestAnimationFrame(animateRing);
+}
+requestAnimationFrame(animateRing);
+
+/* ─────────────── PROGRESS BAR ACCORDING TO SCROLL ─────────────── */
+window.addEventListener('scroll', () => {
+  const scrollTotal = document.body.scrollHeight - window.innerHeight;
+  const currentScroll = window.scrollY;
+  document.getElementById('prog').style.width = (currentScroll / scrollTotal * 100) + '%';
+});
+
+/* ─────────────── PREMIUM SCROLL ENTRANCE REVEAL ENGINE ─────────────── */
+const revealElements = document.querySelectorAll('.reveal');
+const wordElements = document.querySelectorAll('.w');
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      
+      // If the entry contains words, stagger them beautifully
+      const words = entry.target.querySelectorAll('.w');
+      if(words.length > 0) {
+        words.forEach((w, index) => {
+          setTimeout(() => {
+            w.classList.add('visible');
+          }, index * 60);
+        });
+      }
+    }
+  });
+}, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+
+revealElements.forEach(el => revealObserver.observe(el));
+wordElements.forEach(w => revealObserver.observe(w));
+
+/* ─────────────── GYROSCOPE/MOUSE PARALLAX EFFECT ON PAGES ─────────────── */
+document.querySelectorAll('.page').forEach(page => {
+  page.addEventListener('mousemove', (e) => {
+    const rect = page.getBoundingClientRect();
+    const x = e.clientX - rect.left - (rect.width/2);
+    const y = e.clientY - rect.top - (rect.height/2);
+    
+    // Smooth fine tilt
+    page.style.transform = `rotateY(${x * 0.005}deg) rotateX(${-y * 0.005}deg) translateY(-5px)`;
+  });
+  
+  page.addEventListener('mouseleave', () => {
+    page.style.transform = `rotateY(0deg) rotateX(0deg) translateY(0px)`;
+  });
+});
+</script>
+
+</body>
+</html>
